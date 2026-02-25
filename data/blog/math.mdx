@@ -1,0 +1,58 @@
+---
+title: js数字高精度计算方案 decimal.js
+date: '2025-01-25'
+tags: ['math', 'decimal']
+draft: true
+summary: js浮点数计算会丢失精度，decimal.js完美解决
+---
+
+
+## 为什么需要 decimal.js
+
+JavaScript 原生 Number 采用 IEEE-754 双精度浮点数，在做十进制运算时会出现 `0.1 + 0.2 !== 0.3` 这类精度丢失问题。  
+[decimal.js](https://github.com/MikeMcl/decimal.js) 提供了任意精度的 Decimal 类型，让加减乘除结果与日常笔算完全一致。
+
+## 核心 API（加减乘除）
+
+```javascript
+import Decimal from 'decimal.js'
+
+const a = new Decimal('0.1')
+const b = new Decimal('0.2')
+
+a.plus(b).toString()  // '0.3' 加法
+a.minus(b).toString() // '-0.1' 减法
+a.times(b).toString() // '0.02' 乘法
+a.div(b).toString()   // '0.5' 除法
+```
+
+## 简单封装
+
+为了更方便使用，可以封装一个工具函数：
+
+```javascript
+import Decimal from 'decimal.js'
+
+const decimal = {
+  add(a, b) {
+    return new Decimal(a).plus(b).toString()
+  },
+  sub(a, b) {
+    return new Decimal(a).minus(b).toString()
+  },
+  mul(a, b) {
+    return new Decimal(a).times(b).toString()
+  },
+  div(a, b) {
+    return new Decimal(a).div(b).toString()
+  }
+}
+
+decimal.add('0.1', '0.2')  // '0.3'
+decimal.sub('0.1', '0.2')  // '-0.1'
+decimal.mul('0.1', '0.2')  // '0.02'
+decimal.div('0.1', '0.2')  // '0.5'
+```
+
+## 注意
+decimal实例化对象计算之后，返回值是string类型

@@ -14,6 +14,7 @@ export default function Page() {
     <>
       <AuthorLayout content={mainContent}>
         <MDXLayoutRenderer code={author.body.code} />
+        Lorem ipsum dolor sit amet,
       </AuthorLayout>
     </>
   )
